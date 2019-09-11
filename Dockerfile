@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libpng-dev \
         git \
+        wget \
+        cmake \
     && docker-php-ext-install -j$(nproc) iconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
@@ -18,6 +20,23 @@ RUN apt-get update && apt-get install -y \
     && make \ 
     && make install \
     && docker-php-ext-enable yaf \
+    #安装zip扩展
+    && cd /usr/local/src \
+    && wget   https://libzip.org/download/libzip-1.5.2.tar.gz \
+    && tar -xvf libzip-1.5.2.tar.gz \
+    && cd libzip-1.5.2 \
+    && cmake . \
+    && make && make install \
+    && cd /usr/local/src \
+    && docker-php-ext-install -j$(nproc) zip \
+    
+    #安装composer
+    && cd /usr/local/src \
+    && curl -sS https://getcomposer.org/installer | php \
+    && mv composer.phar /usr/bin/composer \
+
+    #安装pdo_mysql
+    && docker-php-ext-install pdo_mysql \
     #安装redis
     && pecl install igbinary \
     && docker-php-ext-enable igbinary \
@@ -41,10 +60,5 @@ RUN apt-get update && apt-get install -y \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
     #日常清理
-    && apt-get remove -y git \
+    && apt-get remove -y wget \
     && rm -rf /usr/local/src/*
-
-
-
-
-
