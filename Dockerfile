@@ -59,6 +59,11 @@ RUN apt-get update && apt-get install -y \
     #安装mongoDB
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
+    #修改配置文件
+    && cd  /usr/local/etc/php \
+    && cp php.ini-production php.ini \
+    #追加环境配置
+    && echo -e "[yaf]\nyaf.environ=test\nyaf.use_namespace=1">>php.ini \
     #日常清理
     && apt-get remove -y wget \
     && rm -rf /usr/local/src/*
