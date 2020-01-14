@@ -63,7 +63,7 @@ RUN apt-get update && apt-get install -y \
     && cd  /usr/local/etc/php \
     && cp php.ini-production php.ini \
     #追加环境配置
-    && echo -e "[yaf]\nyaf.environ=test\nyaf.use_namespace=1">>php.ini \
+    && echo  "[yaf]\nyaf.environ=sqb\nyaf.use_namespace=1">>php.ini \
     #日常清理
     && apt-get remove -y wget \
     && rm -rf /usr/local/src/*
